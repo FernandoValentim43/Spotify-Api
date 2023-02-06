@@ -8,19 +8,19 @@ spotifyApi.setAccessToken(process.env.TOKEN);
 function getMyData() {
   (async () => {
     const me = await spotifyApi.getMe();
-    /*  console.log(me.body); */
-    getUserPlaylists(me.body.id);
+    getUserPlaylists();
   })().catch((e) => {
     console.error(e);
   });
 }
 
-async function getUserPlaylists(userName) {
-  const data = await spotifyApi.getMySavedTracks(userName);
+async function getUserPlaylists() {
+  const data = (await spotifyApi.getMySavedTracks({limit : 50})).body
 
-  console.log("-------------------------------------------------------");
+  console.log(data)
 
-  /* for (let i = 0; i < data.body.items.length; i++) {
+
+ /*  for (let i = 0; i < data.body.items.length; i++) {
     console.log(
       "SONG NAME: " +
         data.body.items[i].track.name +
@@ -30,4 +30,9 @@ async function getUserPlaylists(userName) {
   } */
 }
 
-getMyData();
+getMyData()
+
+
+
+  
+
