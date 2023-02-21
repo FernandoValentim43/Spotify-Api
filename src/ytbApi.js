@@ -6,16 +6,18 @@ const youtube = google.youtube({
   auth: process.env.YTB // Replace with your own API key
 });
 
-async function searchAndPlay() {
-    const searchResult = await youtube.search.list({
-      part: 'id',
-      q: 'banana',
-      type: 'video'
-    });
-  
-    const videoId = searchResult.data.items[0].id.videoId;
-    const url = `https://www.youtube.com/watch?v=${videoId}`;
-    console.log(url);
-  }
-  
-  searchAndPlay();
+async function searchVideo(name, artist) {
+  const query = `${name} ${artist} music video`;
+  const searchResult = await youtube.search.list({
+    part: 'id',
+    q: query,
+    type: 'video'
+  });
+
+  const videoId = searchResult.data.items[0].id.videoId;
+  const url = `https://www.youtube.com/watch?v=${videoId}`;
+  console.log(url);
+}
+
+
+module.exports = searchVideo;

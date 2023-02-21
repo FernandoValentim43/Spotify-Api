@@ -4,24 +4,27 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const spotifyApi = new SpotifyWebApi();
 spotifyApi.setAccessToken(process.env.TOKEN);
 
-async function getAllSongs() {
+async function getSavedSongs() {
   const allTracks = [];
 
-  const playlist = (await spotifyApi.getMySavedTracks()).body;
+  const playlist = (await spotifyApi.getMySavedTracks({ limit: 50 })).body; // set limit to 50 to reduce the number of API calls
 
-  if (playlist.total > playlist.limit) {
-    // Divide the total number of track by the limit to get the number of API calls
-    for (let i = 1; i < Math.ceil(playlist.total / playlist.limit); i++) {
-      const trackToAdd = (await spotifyApi.getMySavedTracks({
-        offset: playlist.limit * i // Offset each call by the limit * the call's index
-      })).body.items;
+  const total = playlist.total;
+  let offset = playlist.limit;
 
-      allTracks.push(...trackToAdd);
-      console.log(`Downloaded ${allTracks.length} songs out of ${playlist.total}`);
-    }
-  } else {
-    allTracks.push(...playlist.items);
+  while (offset < total) {
+    const trackToAdd = (await spotifyApi.getMySavedTracks({
+      limit: playlist.limit,
+      offset: offset
+    })).body.items;
+
+    allTracks.push(...trackToAdd);
+    offset += playlist.limit;
+    console.log(`Downloaded ${allTracks.length} songs out of ${total}`);
   }
+
+  allTracks.push(...playlist.items);
+  console.log(`Downloaded ${allTracks.length} songs out of ${total}`);
 
   const trackObjects = allTracks.map((track) => {
     const { name, artists } = track.track;
@@ -29,12 +32,8 @@ async function getAllSongs() {
     return { artist, name };
   });
 
-  const data = JSON.stringify(trackObjects, null, 2);
-
-  fs.writeFile('tracks.json', data, (err) => {
-    if (err) throw err;
-    console.log('The file has been saved!');
-  });
+  return trackObjects;
 }
 
-getAllSongs();
+
+module.exports = getSavedSongs;
