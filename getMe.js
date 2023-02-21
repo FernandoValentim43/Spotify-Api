@@ -4,34 +4,6 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const spotifyApi = new SpotifyWebApi();
 spotifyApi.setAccessToken(process.env.TOKEN);
 
-
-/*
-let allTracks = []
-async function getAllSongs() {
-  
-  const playlist = (await spotifyApi.getMySavedTracks()).body;
-
-  if (playlist.total > playlist.limit) {
-    // Divide the total number of track by the limit to get the number of API calls
-    for (let i = 1; i < Math.ceil(playlist.total / playlist.limit); i++) {
-      const trackToAdd = (await spotifyApi.getMySavedTracks({
-        offset: playlist.limit * i // Offset each call by the limit * the call's index
-      })).body.items
-
-     allTracks.push(...trackToAdd)
-    }
-  }
-
- 
-}
-
-
-getAllSongs()
-
-
- */
-
-
 async function getAllSongs() {
   const allTracks = [];
 
