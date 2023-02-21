@@ -16,8 +16,9 @@ async function searchVideo(name, artist) {
 
   const videoId = searchResult.data.items[0].id.videoId;
   const url = `https://www.youtube.com/watch?v=${videoId}`;
-  console.log(url);
+  return url;
 }
+
 
 
 module.exports = searchVideo;

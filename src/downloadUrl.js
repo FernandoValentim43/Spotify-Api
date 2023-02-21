@@ -9,15 +9,28 @@ async function downloadAudio(url) {
         if (!fs.existsSync('./src/downloads')) {
             fs.mkdirSync('./src/downloads');
         }
-        const writableStream = fs.createWriteStream(`./src/downloads/${videoTitle}.mp3`);
+        const writableStream = fs.createWriteStream(`./src/downloads/${videoTitle.replace(/[^a-zA-Z0-9 ]/g, '')
+    }.mp3`);
 
-        ytdl(url, { filter: 'audioonly' })
-        .pipe(writableStream);
+        writableStream.on('error', (error) => {
+            console.log(`Error writing audio file: ${error.message}`);
+        });
+
+        const audioStream = ytdl(url, { filter: 'audioonly' });
+
+        audioStream.on('error', (error) => {
+            console.log(`Error downloading audio stream: ${error.message}`);
+        });
+
+        audioStream.pipe(writableStream);
 
         console.log(`Downloading audio of "${videoTitle}" to downloads folder`);
     } catch (error) {
-        console.log(error);
+        console.log(`Error downloading audio for URL ${url}: ${error.message}`);
     }
 }
+
+
+downloadAudio("https://www.youtube.com/watch?v=GkzRyKWChjY")
 
 module.exports = downloadAudio;
