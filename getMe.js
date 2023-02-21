@@ -33,40 +33,36 @@ getAllSongs()
 
 
 async function getAllSongs() {
+  const allTracks = [];
 
   const playlist = (await spotifyApi.getMySavedTracks()).body;
-
-  let allTracks = playlist.items; // Add the first batch of tracks to the array
 
   if (playlist.total > playlist.limit) {
     // Divide the total number of track by the limit to get the number of API calls
     for (let i = 1; i < Math.ceil(playlist.total / playlist.limit); i++) {
       const trackToAdd = (await spotifyApi.getMySavedTracks({
         offset: playlist.limit * i // Offset each call by the limit * the call's index
-      })).body.items
+      })).body.items;
 
-     allTracks.push(...trackToAdd)
-
-     console.log(`Downloaded ${allTracks.length} songs out of ${playlist.total}`);
+      allTracks.push(...trackToAdd);
+      console.log(`Downloaded ${allTracks.length} songs out of ${playlist.total}`);
     }
+  } else {
+    allTracks.push(...playlist.items);
   }
 
-  // Map the track data to an array of objects with "name" and "artist" fields
-  const trackObjects = allTracks.map(track => {
-    return {
-      name: track.track.name,
-      artist: track.track.artists[0].name,
-    };
+  const trackObjects = allTracks.map((track) => {
+    const { name, artists } = track.track;
+    const artist = artists[0].name;
+    return { artist, name };
   });
 
-  return trackObjects; // Return the array of track objects
+  const data = JSON.stringify(trackObjects, null, 2);
+
+  fs.writeFile('tracks.json', data, (err) => {
+    if (err) throw err;
+    console.log('The file has been saved!');
+  });
 }
 
-// Example usage
-getAllSongs().then(trackObjects => {
-  console.log('Got all tracks:', trackObjects);
-}).catch(error => {
-  // Handle errors here
-  console.error(error);
-});
-
+getAllSongs();
