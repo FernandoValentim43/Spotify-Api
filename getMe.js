@@ -46,6 +46,8 @@ async function getAllSongs() {
       })).body.items
 
      allTracks.push(...trackToAdd)
+
+     console.log(`Downloaded ${allTracks.length} songs out of ${playlist.total}`);
     }
   }
 
@@ -67,3 +69,4 @@ getAllSongs().then(trackObjects => {
   // Handle errors here
   console.error(error);
 });
+
