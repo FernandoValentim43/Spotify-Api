@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 const SpotifyWebApi = require("spotify-web-api-node");
 const express = require("express");
 
@@ -59,11 +60,19 @@ app.get("/callback", (req, res) => {
 
       console.log("access_token:", access_token);
       console.log("refresh_token:", refresh_token);
+      res.send("Success! You can now close the window.");
 
       console.log(
         `Sucessfully retreived access token. Expires in ${expires_in} s.`
       );
-      res.send("Success! You can now close the window.");
+
+      fs.appendFile(".env", `\nTOKEN=${access_token}`, function (err) {
+        if (err) {
+          console.error("Error writing to .env file:", err);
+        } else {
+          console.log("New access token saved to .env file.");
+        }
+      });
 
       setInterval(async () => {
         const data = await spotifyApi.refreshAccessToken();
@@ -72,6 +81,15 @@ app.get("/callback", (req, res) => {
         console.log("The access token has been refreshed!");
         console.log("access_token:", access_token);
         spotifyApi.setAccessToken(access_token);
+
+        fs.appendFile(".env", `\nTOKEN=${access_token}`, function (err) {
+          if (err) {
+            console.error("Error writing to .env file:", err);
+          } else {
+            console.log("New access token saved to .env file.");
+          }
+        });
+
       }, (expires_in / 2) * 1000);
     })
     .catch((error) => {

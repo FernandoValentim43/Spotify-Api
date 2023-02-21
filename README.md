@@ -1,2 +1,4 @@
 # Spotify-Api
-Testing the spotify API to fecth user's songs
+Using the spotify api to fetch user's saved songs, then using the Youtube api to search for these songs and download their audios
+
+

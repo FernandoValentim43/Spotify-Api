@@ -11,6 +11,7 @@ async function getSavedSongs() {
 
   const total = playlist.total;
   let offset = playlist.limit;
+  console.log("------------- FETCHING SONGS --------------")
 
   while (offset < total) {
     const trackToAdd = (await spotifyApi.getMySavedTracks({
