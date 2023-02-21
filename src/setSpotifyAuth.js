@@ -66,13 +66,16 @@ app.get("/callback", (req, res) => {
         `Sucessfully retreived access token. Expires in ${expires_in} s.`
       );
 
-      fs.appendFile(".env", `\nTOKEN=${access_token}`, function (err) {
-        if (err) {
-          console.error("Error writing to .env file:", err);
-        } else {
-          console.log("New access token saved to .env file.");
-        }
-      });
+      const envFile = fs.readFileSync(".env", "utf8");
+
+      // Update TOKEN value
+      const updatedEnvFile = envFile.replace(
+        /TOKEN=.*/,
+        `TOKEN=${access_token}`
+      );
+
+      // Write updated .env file
+      fs.writeFileSync(".env", updatedEnvFile);
 
       setInterval(async () => {
         const data = await spotifyApi.refreshAccessToken();
@@ -82,14 +85,16 @@ app.get("/callback", (req, res) => {
         console.log("access_token:", access_token);
         spotifyApi.setAccessToken(access_token);
 
-        fs.appendFile(".env", `\nTOKEN=${access_token}`, function (err) {
-          if (err) {
-            console.error("Error writing to .env file:", err);
-          } else {
-            console.log("New access token saved to .env file.");
-          }
-        });
+        const envFile = fs.readFileSync(".env", "utf8");
 
+        // Update TOKEN value
+        const updatedEnvFile = envFile.replace(
+          /TOKEN=.*/,
+          `TOKEN=${access_token}`
+        );
+
+        // Write updated .env file
+        fs.writeFileSync(".env", updatedEnvFile);
       }, (expires_in / 2) * 1000);
     })
     .catch((error) => {
