@@ -3,15 +3,20 @@ const mongoose = require("mongoose");
 const songSchema = new mongoose.Schema({
   artist: {
     type: String,
-    required: true,
+    required: false,
+    default: false
   },
   name: {
     type: String,
-    required: true,
+    required: false,
+    default: false
+
   },
   addedAt: {
     type: Date,
-    required: true,
+    required: false,
+    default: false
+
   },
   alreadyUrl: {
     type: Boolean,

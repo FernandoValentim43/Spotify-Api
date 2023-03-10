@@ -17,7 +17,7 @@ async function main() {
     "Do you want to fetch the songs again? (y/n): ",
     async (answer) => {
       if (answer === "y") {
-        //fetch the songs
+        //fetch and save the songs
         const savedSongs = await getSavedSongs();
         saveSongs(savedSongs)
       } else {
