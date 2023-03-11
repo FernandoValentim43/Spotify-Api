@@ -1,5 +1,4 @@
 require("dotenv").config();
-const formatDate = require("./formatDate")
 const SpotifyWebApi = require("spotify-web-api-node");
 const spotifyApi = new SpotifyWebApi();
 spotifyApi.setAccessToken(process.env.TOKEN);
@@ -31,7 +30,7 @@ async function getSavedSongs() {
   const trackObjects = allTracks.map((track) => {
     const { name, artists } = track.track;
     const artist = artists[0].name;
-    const addedAt = formatDate(track.added_at);
+    const addedAt = track.added_at;
 
     addedAt.substring(0, 10);
     return { artist, name, addedAt };

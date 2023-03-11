@@ -1,8 +1,8 @@
-require("dotenv").config();
+/* require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-/* const Song = require("./songModel") */
+const Song = require("./models/Song")
 //express
 const app = express();
 app.use(express.json());
@@ -15,39 +15,10 @@ mongoose.connect(process.env.MONGO_URL, () => {
 });
 
 //app setup
-app.listen(4040, () =>
-  console.log(`Server running on port 4040 - http://localhost:4040`)
+app.listen(3939, () =>
+  console.log(`Server running on port 3939 - http://localhost:3939`)
 );
 
-const songSchema = new mongoose.Schema({
- 
-  artist: {
-    type: String,
-    required: false,
-  },
-  name: {
-    type: String,
-    required: false,
-  },
-  addedAt: {
-    type: String,
-    default: Date.now(),
-  },
-  alreadyUrl: {
-    type: Boolean,
-    default: false,
-  },
-  alreadyDownloaded: {
-    type: Boolean,
-    default: false,
-  },
-  url: {
-    type: String,
-    default: null,
-  },
-});
-
-const Song = mongoose.model("Song", songSchema);
 
 app.get("/songs", async (req, res) => {
   const songs = await Song.find();
@@ -56,12 +27,13 @@ app.get("/songs", async (req, res) => {
 });
 
 app.post("/song/new", (req, res) => {
-  const link = new Song({
-    text: req.body.text,
-    label: req.body.label,
-    tags: req.body.tags,
+  const song = new Song({
+    artist: req.body.artist,
+    name: req.body.name,
+    addedAt: req.body.addedAt
   });
 
-  link.save();
-  res.json(link);
+  song.save();
+  res.json(song);
 });
+ */

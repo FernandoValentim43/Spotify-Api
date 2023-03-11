@@ -6,6 +6,7 @@ POST http://localhost:4040/song/new
 Content-Type: application/json
 
 {
-    "name": "xxxxxxxxxxxxxx",
-    "artist": "xxxxxxxxxxxx"
+    "artist": "Jessica Lea Mayfield",
+    "name": "Standing In The Sun",
+    "addedAt": "2023-02-21T02:56:17Z"
 }
