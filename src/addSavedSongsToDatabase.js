@@ -5,20 +5,26 @@ async function addSavedSongsToDatabase() {
     // load the JSON file with the songs
     const songs = require('./data/saved-songs.json');
 
-    // get the first song from the array
-    const firstSong = songs[0];
+    // get the first 120 songs from the array
+    const first120Songs = songs.slice(0, 120);
 
-    // create a new Song document with the first song data
-    const song = new Song({
-      artist: firstSong.artist,
-      name: firstSong.name,
-      addedAt: new Date(firstSong.addedAt)
-    });
+    // create an array to store the Song documents
+    const songDocuments = [];
 
-    // save the Song document to the database
-    await song.save();
+    // loop through the first 120 songs and create Song documents for each
+    for (const songData of first120Songs) {
+      const song = new Song({
+        artist: songData.artist,
+        name: songData.name,
+        addedAt: new Date(songData.addedAt)
+      });
+      songDocuments.push(song);
+    }
 
-    console.log(`Added song "${song.name}" by ${song.artist} to the database.`);
+    // save the Song documents to the database
+    await Song.insertMany(songDocuments);
+
+    console.log(`Added ${songDocuments.length} songs to the database.`);
   } catch (err) {
     console.error(err);
   }

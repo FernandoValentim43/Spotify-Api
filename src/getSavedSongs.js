@@ -10,13 +10,15 @@ async function getSavedSongs() {
 
   const total = playlist.total;
   let offset = playlist.limit;
-  console.log("------------- FETCHING SONGS --------------")
+  console.log("------------- FETCHING SONGS --------------");
 
   while (offset < total) {
-    const trackToAdd = (await spotifyApi.getMySavedTracks({
-      limit: playlist.limit,
-      offset: offset
-    })).body.items;
+    const trackToAdd = (
+      await spotifyApi.getMySavedTracks({
+        limit: playlist.limit,
+        offset: offset,
+      })
+    ).body.items;
 
     allTracks.push(...trackToAdd);
     offset += playlist.limit;
@@ -25,19 +27,19 @@ async function getSavedSongs() {
 
   allTracks.push(...playlist.items);
   console.log(`Downloaded ${allTracks.length} songs out of ${total}`);
-  
 
   const trackObjects = allTracks.map((track) => {
-    const { name, artists } = track.track;
+    const { name, artists, id } = track.track;
     const artist = artists[0].name;
     const addedAt = track.added_at;
 
+    const spotifyId = id;
+
     addedAt.substring(0, 10);
-    return { artist, name, addedAt };
+    return { artist, name, addedAt, spotifyId };
   });
 
   return trackObjects;
 }
-
 
 module.exports = getSavedSongs;

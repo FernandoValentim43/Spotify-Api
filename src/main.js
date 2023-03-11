@@ -1,15 +1,16 @@
 // !!!! FIRST SET-UP YOUR API KEY AT setSpotifyAuth.js !!!!!
 
+const path = require("path")
+require('dotenv').config({path:__dirname+'/./../../.env'})
+
 const readline = require("readline");
 const getSavedSongs = require("./getSavedSongs");
 const addSavedSongsToDatabase = require("./addSavedSongsToDatabase");
 const saveSongs = require("./saveSongsJSON");
 
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Song = require("./models/Song");
 
 //mongoose connection
 mongoose.set("strictQuery", false);
