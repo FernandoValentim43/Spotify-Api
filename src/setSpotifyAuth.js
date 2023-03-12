@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const SpotifyWebApi = require("spotify-web-api-node");
 const express = require("express");
+const axios = require("axios");
 
 const scopes = [
   "ugc-image-upload",
@@ -108,3 +109,4 @@ app.listen(8888, () =>
     "HTTP Server up. Now go to http://localhost:8888/login in your browser."
   )
 );
+
