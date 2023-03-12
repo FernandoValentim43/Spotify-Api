@@ -1,6 +1,6 @@
 const Song = require('./models/Song');
 
-async function addSavedSongsToDatabase() {
+async function saveSongsDB() {
   try {
     // load the JSON file with the songs
     const songs = require('./data/saved-songs.json');
@@ -19,12 +19,13 @@ async function addSavedSongsToDatabase() {
     }
 
     // save the Song documents to the database
-    await Song.insertMany(songDocuments);
+    const result = await Song.insertMany(songDocuments);
 
-    console.log(`Added ${songDocuments.length} songs to the database.`);
+    return result.length;
   } catch (err) {
     console.error(err);
   }
 }
 
-module.exports = addSavedSongsToDatabase;
+
+module.exports = saveSongsDB;

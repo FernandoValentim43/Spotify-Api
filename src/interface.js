@@ -1,4 +1,7 @@
 const readline = require("readline");
+const saveSongsDB = require("./saveSongsDB");
+const saveSongsJSON = require("./saveSongsJSON");
+const getSavedSongs = require("./getSavedSongs");
 
 function getUserInput() {
   const rl = readline.createInterface({
@@ -6,38 +9,31 @@ function getUserInput() {
     output: process.stdout,
   });
 
-  const menu = `
-What do you want to do?
-1. Fetch new songs from Spotify
-2. Save the songs into MongoDB
-3. Quit
-`;
-
-  function prompt() {
-    rl.question(menu, async (answer) => {
-      switch (answer) {
-        case "1":
-          console.log("Fetching new songs from Spotify...");
-          break;
-        case "2":
-          console.log("Saving songs into MongoDB...");
-          break;
-        case "3":
+  rl.question(
+    "\n=============================\nWhat do you want to do?\n[1]. Fetch new songs.\n[2]. Save new songs to the database.\n[3]. Quit.\n=============================\n",
+    async (answer) => {
+      if (answer === "1") {
+        //const savedSongs = await getSavedSongs();
+        //saveSongsJSON(savedSongs);
+        console.log("\n*New songs fetched from Spotify!*\n");
+        rl.close();
+        getUserInput();
+      } else if (answer === "2") {
+        saveSongsDB().then((numSongs) => {
+          console.log(`\n*Added ${numSongs} songs to the database!*\n`);
           rl.close();
-          process.exit(); // add this line to exit the app
-          break;
-        default:
-          console.log("Invalid choice, please try again.");
-          break;
+          getUserInput();
+        });
+      } else if (answer === "3") {
+        rl.close();
+        process.exit(0);
+      } else {
+        console.log("Invalid option. Please try again.");
+        rl.close();
+        getUserInput();
       }
-
-      if (answer !== "3") {
-        prompt();
-      }
-    });
-  }
-
-  prompt();
+    }
+  );
 }
 
 module.exports = getUserInput;

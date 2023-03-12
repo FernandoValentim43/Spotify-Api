@@ -5,7 +5,7 @@ require("dotenv").config({ path: __dirname + "/./../../.env" });
 const getUserInput = require("./interface");
 
 const getSavedSongs = require("./getSavedSongs");
-const addSavedSongsToDatabase = require("./addSavedSongsToDatabase");
+const addSavedSongsToDatabase = require("./saveSongsDB");
 const saveSongs = require("./saveSongsJSON");
 
 const express = require("express");
@@ -16,8 +16,7 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 app.use(cors());
-/* const searchVideo = require("./ytbApi");
-const downloadAudio = require("./downloadUrl"); */
+
 
 //app setup
 

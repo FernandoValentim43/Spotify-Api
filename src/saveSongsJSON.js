@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 
-const saveSongs = (savedSongs) => {
+const saveSongsJSON = (savedSongs) => {
     const dataFolderPath = path.join(__dirname, "data");
         if (!fs.existsSync(dataFolderPath)) {
           fs.mkdirSync(dataFolderPath);
@@ -15,4 +15,4 @@ const saveSongs = (savedSongs) => {
 }
 
 
-module.exports = saveSongs;
+module.exports = saveSongsJSON;
