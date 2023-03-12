@@ -1,9 +1,9 @@
 // !!!! FIRST SET-UP YOUR API KEY AT setSpotifyAuth.js !!!!!
 
-const path = require("path")
-require('dotenv').config({path:__dirname+'/./../../.env'})
+const path = require("path");
+require("dotenv").config({ path: __dirname + "/./../../.env" });
+const getUserInput = require("./interface");
 
-const readline = require("readline");
 const getSavedSongs = require("./getSavedSongs");
 const addSavedSongsToDatabase = require("./addSavedSongsToDatabase");
 const saveSongs = require("./saveSongsJSON");
@@ -11,12 +11,6 @@ const saveSongs = require("./saveSongsJSON");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
-//mongoose connection
-mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_URL, () => {
-  console.log("Mongo connected");
-});
 
 //express
 const app = express();
@@ -27,35 +21,24 @@ const downloadAudio = require("./downloadUrl"); */
 
 //app setup
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
 async function main() {
-  app.listen(3939, () =>
-    console.log(`Server running on port 3939 - http://localhost:3939`)
-  );
-
-  rl.question(
-    "Do you want to fetch the songs again? (y/n): ",
-    async (answer) => {
-      if (answer === "y") {
-        // fetch and save the songs
-        const savedSongs = await getSavedSongs();
-        saveSongs(savedSongs);
-
-        // add the saved songs to the database
-        addSavedSongsToDatabase();
+  await new Promise((resolve, reject) => {
+    mongoose.set("strictQuery", false);
+    mongoose.connect(process.env.MONGO_URL, (err) => {
+      if (err) {
+        reject(err);
       } else {
-        // add the saved songs to the database
-        addSavedSongsToDatabase();
-        rl.close();
+        console.log("Mongo connected");
+        resolve();
       }
+    });
+  });
 
-      rl.close();
-    }
-  );
+  app.listen(4000, () => {
+    console.log(`Server running on port 4000 - http://localhost:4000`);
+
+    getUserInput();
+  });
 }
 
 main();

@@ -9,6 +9,10 @@ const songSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  spotifyId: {
+    type: String,
+    required: true
+  },
   addedAt: {
     type: Date,
     required: true

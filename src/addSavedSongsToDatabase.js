@@ -5,18 +5,15 @@ async function addSavedSongsToDatabase() {
     // load the JSON file with the songs
     const songs = require('./data/saved-songs.json');
 
-    // get the first 120 songs from the array
-    const first120Songs = songs.slice(0, 120);
-
     // create an array to store the Song documents
     const songDocuments = [];
 
-    // loop through the first 120 songs and create Song documents for each
-    for (const songData of first120Songs) {
+    for (const songData of songs) {
       const song = new Song({
         artist: songData.artist,
         name: songData.name,
-        addedAt: new Date(songData.addedAt)
+        addedAt: new Date(songData.addedAt),
+        spotifyId: songData.spotifyId
       });
       songDocuments.push(song);
     }
